@@ -1,13 +1,13 @@
-# CS290 Final Project
+# CS340 Final Project - Harry Potter Library
 
 ## Description
-This is a SPA that connects to a MySQL database to show completed workouts. 
+Database of Harry Potter Characters
 
 ## Setup
 1. Download/Open/Clone repo to your computer
-2. Create `config.js` in root folder of project (see below) 
+2. Create `config.js` in root folder of project (see below)
 3. Run `npm install` to install dependencies
-4. Run `npm start` and navigate to localhost:12017 to view
+4. Run `npm start` and navigate to localhost:3612 to view
 
 ## `config.js` setup
 ```
@@ -18,5 +18,3 @@ module.exports = {
   database: 'student'
 }
 ```
-
-
