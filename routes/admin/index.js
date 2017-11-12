@@ -20,13 +20,20 @@ router.get('/reset-all-tables',(req,res,next) => {
   ];
   let createTables = [
     db.createTable('hp_characters', 'id int(32) PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) NOT NULL')
+  ];
+  let addData = [
+    db.createRow('hp_characters', '`Tyler McSilva`')
   ]
   Promise.all(dropTables)
     .then(
       Promise.all(createTables)
-        .then( () => {
-          res.send('success');
-        }))
+        .then(
+          Promise.all(addData)
+          .then(
+            res.send('success')
+          )
+        )
+      );
 });
 
 // Create 1

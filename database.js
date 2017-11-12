@@ -4,7 +4,7 @@ const { Promise }   = require('bluebird');
 
 const db = mysql.createPool(config);
 
-exports.createTable = (table, attributes, cb) => {
+exports.createTable = (table, attributes) => {
   return new Promise( (resolve, reject) => {
     db.getConnection((err, connection) => {
       if(err) reject(err);
@@ -17,7 +17,7 @@ exports.createTable = (table, attributes, cb) => {
   });
 }
 
-exports.dropTable = (table, cb) => {
+exports.dropTable = (table) => {
   return new Promise( (resolve, reject) => {  db.getConnection((err, connection) => {
       if(err) reject(err);
       connection.query(`DROP TABLE IF EXISTS ${table}`, (error, result) => {
@@ -29,7 +29,7 @@ exports.dropTable = (table, cb) => {
   });
 }
 
-exports.listAll = (table, cb) => {
+exports.listAll = (table) => {
   return new Promise( (resolve, reject) => {
     db.getConnection( (err, connection) => {
       if(err) reject(err);
@@ -42,11 +42,11 @@ exports.listAll = (table, cb) => {
   });
 }
 
-exports.createRow = (table, values, cb) => {
+exports.createRow = (table, cols, values) => {
   return new Promise( (resolve, reject) => {
     db.getConnection( (err, connection) => {
       if(err) reject(err);
-      connection.query(`INSERT INTO ${table} VALUES (${values})`, (error, result) => {
+      connection.query(`INSERT INTO ${table} (${cols}) VALUES ${values}`, (error, result) => {
         connection.release();
         if(error) reject(error);
         resolve(result);
@@ -55,7 +55,7 @@ exports.createRow = (table, values, cb) => {
   });
 }
 
-exports.query = (query, cb) => {
+exports.query = (query) => {
   return new Promise( (resolve, reject) => {
     db.getConnection( (err, connection) => {
       if(err) reject(err);
