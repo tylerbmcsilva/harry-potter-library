@@ -5,7 +5,7 @@ var router = new Router();
 
 // Get all
 router.get('/', (req,res,next) => {
-  res.send('get-all');
+  res.render('characters');
 });
 
 // Create 1
