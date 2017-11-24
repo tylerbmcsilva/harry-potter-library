@@ -1,0 +1,38 @@
+{{#if error}}
+<div class="alert alert-danger" role="alert">
+  <h3 class="alert-heading">The nargles are at it again...</h3>
+  <p>{{error}}</p>
+</div>
+{{else}}
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/schools">Schools</a></li>
+  <li class="breadcrumb-item"><a href="/schools/{{data.school_id}}">{{data.school_name}}</a></li>
+  <li class="breadcrumb-item active">{{data.name}}</li>
+</ol>
+<div class="row">
+  <div class="col-11">
+    <h2>{{data.name}}</h2>
+  </div>
+  <div class="col-1">
+    <a href="/houses/{{data.id}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+  </div>
+</div>
+<p>{{data.description}}</p>
+<table class="table">
+  <tr>
+    <td><strong>School</strong></td>
+    <td><a href="/schools/{{data.school_id}}">{{data.school_name}}</a></td>
+  </tr>
+  <tr>
+    <td><strong>Animal</strong></td>
+    <td>{{data.animal}}</td>
+  </tr>
+  {{#if data.founder_id}}
+  <tr>
+    <td><strong>Founder</strong></td>
+    <td><a href="/characters/{{data.founder_id}}">{{data.founder_name}}</a></td>
+  </tr>
+  {{/if}}
+</table>
+{{/if}}

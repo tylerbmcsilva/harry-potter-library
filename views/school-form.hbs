@@ -1,0 +1,34 @@
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/schools">Schools</a></li>
+  <li class="breadcrumb-item active">{{#if school}}Edit{{else}}Add{{/if}}</li>
+</ol>
+<h1>{{#if school}}Edit{{else}}Add{{/if}} School</h1>
+<form method="post">
+  <input class="hidden-xs-up" type="hidden" name="id" value="{{school.id}}" />
+  <div class="form-group row">
+    <label for="name" class="col-2 col-form-label">Name</label>
+    <div class="col-10">
+      <input class="form-control" name="name" type="text" value="{{school.name}}" id="name">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="yearfounded" class="col-2 col-form-label">Year Founded</label>
+    <div class="col-10">
+      <input class="form-control" name="yearfounded" type="text" value="{{school.yearfounded}}" id="yearfounded">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="location" class="col-2 col-form-label">Location</label>
+    <div class="col-10">
+      <input class="form-control" name="location" type="text" value="{{school.location}}" id="location">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description" class="col-2 col-form-label">Description</label>
+    <div class="col-10">
+      <textarea class="form-control" name="description" id="description" rows="3">{{school.description}}</textarea>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

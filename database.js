@@ -85,7 +85,7 @@ exports.query = (query) => {
   return new Promise( (resolve, reject) => {
     db.getConnection( (err, connection) => {
       if(err) reject(err);
-      connection.query( (error, result) => {
+      connection.query( query, (error, result) => {
         connection.release();
         if(error) reject(error);
         resolve(result);

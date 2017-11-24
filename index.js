@@ -10,9 +10,18 @@ const db			= Promise.promisifyAll(require('./database'));
 
 // SET VIEW ENGINE
 const hbs 		= require('express-handlebars').create({
-	defaultLayout:'main',
-	extname: '.hbs'
+	defaultLayout: 'main',
+	extname:       '.hbs',
+  helpers:       {
+    if_eq: (a, b, opts) => {
+      if(a == b) // Or === depending on your needs
+        return opts.fn(this);
+      else
+        return opts.inverse(this);
+    }
+  }
 });
+
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 

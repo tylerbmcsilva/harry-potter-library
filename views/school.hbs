@@ -1,0 +1,40 @@
+{{#if error}}
+<div class="alert alert-danger" role="alert">
+  <h3 class="alert-heading">The nargles are at it again...</h3>
+  <p>{{error}}</p>
+</div>
+{{else}}
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/schools">Schools</a></li>
+  <li class="breadcrumb-item active">{{school.name}}</li>
+</ol>
+<div class="row">
+  <div class="col-11">
+    <h2>{{school.name}}</h2>
+  </div>
+  <div class="col-1">
+    <a href="/schools/{{school.id}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+  </div>
+</div>
+<p>{{school.description}}</p>
+<table class="table">
+  <tr>
+    <td><strong>Year Founded</strong></td>
+    <td>{{school.yearfounded}}</td>
+  </tr>
+  <tr>
+    <td><strong>Location</strong></td>
+    <td>{{school.location}}</td>
+  </tr>
+</table>
+<h3>Houses</h3>
+<ul>
+  {{#each houses}}
+  <li>
+    <a href="/houses/{{id}}">{{name}}</a>
+  </li>
+  {{/each}}
+</ul>
+<a href="/houses/add?school_id={{school.id}}" class="btn btn-primary">ADD HOUSE</a>
+{{/if}}

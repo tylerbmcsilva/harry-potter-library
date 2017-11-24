@@ -1,0 +1,45 @@
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/pets">Pets</a></li>
+  <li class="breadcrumb-item active">{{#if pet}}Edit{{else}}Add{{/if}}</li>
+</ol>
+<h1>{{#if pet}}Edit{{else}}Add{{/if}} Pet</h1>
+<form method="post">
+  <input class="hidden-xs-up" type="hidden" name="id" value="{{pet.id}}" />
+  <input class="hidden-xs-up" type="hidden" name="school_id" value="{{#if school_id}}{{school_id}}{{else}}{{pet.school_id}}{{/if}}" required />
+  <div class="form-group row">
+    <label for="name" class="col-2 col-form-label">Name</label>
+    <div class="col-10">
+      <input class="form-control" name="name" type="text" value="{{pet.name}}" id="name">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="type" class="col-2 col-form-label">Type</label>
+    <div class="col-10">
+      <input class="form-control" name="type" type="text" value="{{pet.type}}" id="type">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="age" class="col-2 col-form-label">Age</label>
+    <div class="col-10">
+      <input class="form-control" name="age" type="number" min="1" max="100" value="{{pet.age}}" id="age">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="owner_id" class="col-2 col-form-label">Owner</label>
+    <div class="col-10">
+      <select class="form-control" name="owner_id" id="owner_id" required>
+        {{#each characters}}
+        <option value="{{id}}" {{#if_eq id @root.pet.owner_id}}selected{{/if_eq}} {{#if_eq id @root.owner_id}}selected{{/if_eq}}>{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description" class="col-2 col-form-label">Description</label>
+    <div class="col-10">
+      <textarea class="form-control" name="description" id="description" rows="3">{{pet.description}}</textarea>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

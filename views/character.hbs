@@ -19,20 +19,57 @@
   </div>
 </div>
 <p>{{character.description}}</p>
-<table class="table">
-  <tr>
-    <td><strong>Hometown</strong></td>
-    <td>{{character.hometown}}</td>
-  </tr>
-  <tr>
-    <td><strong>Birth</strong></td>
-    <td>{{character.birth}}</td>
-  </tr>
-  {{#if character.death}}
-  <tr>
-    <td><strong>Death</strong></td>
-    <td>{{character.death}}</td>
-  </tr>
-  {{/if}}
-</table>
+<div class="row">
+  <div class="col-md-6">
+    <table class="table">
+      <tr>
+        <td><strong>Hometown</strong></td>
+        <td>{{character.hometown}}</td>
+      </tr>
+      <tr>
+        <td><strong>Birth</strong></td>
+        <td>{{character.birth}}</td>
+      </tr>
+      {{#if character.death}}
+      <tr>
+        <td><strong>Death</strong></td>
+        <td>{{character.death}}</td>
+      </tr>
+      {{/if}}
+    </table>
+  </div>
+  <div class="col-md-6">
+    <h3>Related</h3>
+    <ul>
+      {{#each relations}}
+      <li>
+        <a href="/characters/{{id}}">{{name}} - {{relation}}</a>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <h3>Pets</h3>
+    <ul>
+      {{#each pets}}
+      <li>
+        <a href="/pets/{{id}}">{{name}}</a>
+      </li>
+      {{/each}}
+    </ul>
+    <a href="/pets/add?owner_id={{character.id}}" class="btn btn-primary">ADD PET</a>
+  </div>
+  <div class="col-md-6">
+    <h3>Concentrations</h3>
+    <ul>
+      {{#each concentrations}}
+      <li>
+        <a href="/concentrations/{{id}}">{{title}}</a>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
 {{/if}}

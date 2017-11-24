@@ -47,14 +47,24 @@ router.post('/add', (req,res,next) => {
 // Get 1
 router.get('/:id', (req,res,next) => {
   let context = {};
-  db.selectById(BASE_TABLE, req.params.id).then( (data) => {
-    if(data.length){
-      context.character = data[0];
-      res.render(SHOW_ONE_TEMPLATE, context);
-    } else {
-      context.error = "No Character Found";
-      res.render(SHOW_ONE_TEMPLATE, context);
-    }
+  let promise_arr = [
+    db.selectById(BASE_TABLE, req.params.id).then( data => context.character = data[0] ),
+    db.query(`SELECT c.id, c.title FROM concentrations c
+      INNER JOIN hpcharacter_concentrations hpcc ON c.id = hpcc.concentration_id
+      INNER JOIN hpcharacter hpc ON hpc.id = hpcc.hpcharacter_id
+      WHERE hpc.id = ${req.params.id}`).then( data => context.concentrations = data ),
+    db.query(`SELECT p.id, p.name FROM pet p
+      INNER JOIN hpcharacter c ON p.owner_id = c.id
+      WHERE c.id = ${req.params.id}`).then( data => context.pets = data ),
+    db.query(`SELECT c2.id, c2.name, r.relation FROM hpcharacter c
+      INNER JOIN hpcharacter_relations r ON c.id = r.char1_id
+      INNER JOIN hpcharacter c2 ON c2.id = r.char2_id
+      WHERE c.id = ${req.params.id}`).then( data => context.relations = data )
+  ]
+
+  Promise.all(promise_arr)
+  .then( ()=> {
+    res.render(SHOW_ONE_TEMPLATE, context);
   })
   .catch( (e) => {
     console.log(e, e.stack);
