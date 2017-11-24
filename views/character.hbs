@@ -23,6 +23,14 @@
   <div class="col-md-6">
     <table class="table">
       <tr>
+        <td><strong>School</strong></td>
+        <td><a href="/schools/{{school.school_id}}">{{school.school_name}}</a></td>
+      </tr>
+      <tr>
+        <td><strong>House</strong></td>
+        <td><a href="/houses/{{school.house_id}}">{{school.house_name}}</a></td>
+      </tr>
+      <tr>
         <td><strong>Hometown</strong></td>
         <td>{{character.hometown}}</td>
       </tr>
@@ -47,6 +55,7 @@
       </li>
       {{/each}}
     </ul>
+    <a href="/characters/{{character.id}}/add-relation" class="btn btn-primary">Add Relation</a>
   </div>
 </div>
 <div class="row">
@@ -59,7 +68,7 @@
       </li>
       {{/each}}
     </ul>
-    <a href="/pets/add?owner_id={{character.id}}" class="btn btn-primary">ADD PET</a>
+    <a href="/pets/add?owner_id={{character.id}}" class="btn btn-primary">Add Pet</a>
   </div>
   <div class="col-md-6">
     <h3>Concentrations</h3>
@@ -70,6 +79,7 @@
       </li>
       {{/each}}
     </ul>
+    <a href="/characters/{{character.id}}/add-concentration" class="btn btn-primary">Add Concentration</a>
   </div>
 </div>
 {{/if}}

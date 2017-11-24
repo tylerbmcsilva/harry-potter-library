@@ -40,7 +40,11 @@ router.get('/:id', (req,res,next) => {
     db.selectById(BASE_TABLE, req.params.id).then((data) => context.school = data[0]),
     db.query(`SELECT h.id, h.name FROM house h
       INNER JOIN school s ON s.id = h.school_id
-      WHERE s.id = ${req.params.id}`).then((data) => context.houses = data )
+      WHERE s.id = ${req.params.id}`).then((data) => context.houses = data ),
+      db.query(`SELECT c.id, c.name FROM hpcharacter c
+        INNER JOIN house h ON c.house_id = h.id
+        INNER JOIN school s ON s.id = h.school_id
+        WHERE s.id = ${req.params.id}`).then( (data) => context.characters = data )
   ]
   Promise.all(promise_arr)
   .then( () => {

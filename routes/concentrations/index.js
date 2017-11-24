@@ -36,14 +36,14 @@ router.post('/add', (req,res,next) => {
 // Get 1
 router.get('/:id', (req,res,next) => {
   let context = {};
-  db.selectById(BASE_TABLE, req.params.id).then( (data) => {
-    if(data.length){
-      context.concentration = data[0];
-      res.render(SHOW_ONE_TEMPLATE, context);
-    } else {
-      context.error = "No Concentration Found";
-      res.render(SHOW_ONE_TEMPLATE, context);
-    }
+  let promises_arr = [
+    db.selectById(BASE_TABLE, req.params.id).then( (data) => context.concentration = data[0] ),
+    db.query(`SELECT c.id, c.name FROM hpcharacter c
+      INNER JOIN hpcharacter_concentrations hpcc ON c.id = hpcc.hpcharacter_id
+      WHERE hpcc.concentration_id = ${req.params.id}`).then( (data) => context.characters = data )
+  ]
+  Promise.all(promises_arr).then( () => {
+    res.render(SHOW_ONE_TEMPLATE, context);
   })
   .catch( (e) => {
     console.log(e, e.stack);

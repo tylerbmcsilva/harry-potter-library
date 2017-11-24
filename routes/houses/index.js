@@ -50,24 +50,25 @@ router.post('/add', (req,res,next) => {
 // Get 1
 router.get('/:id', (req,res,next) => {
   let context = {};
-  db.query(`SELECT s.name AS school_name, c.name AS founder_name, b.*  FROM ${BASE_TABLE} b
-    INNER JOIN school s ON b.school_id = s.id
-    INNER JOIN hpcharacter c ON b.founder_id = c.id
-    WHERE b.id = ${req.params.id}`)
-    .then( (data) => {
-    if(data.length){
-      context.data = data[0];
-      res.render(SHOW_ONE_TEMPLATE, context);
-    } else {
-      context.error = "No House Found";
-      res.render(SHOW_ONE_TEMPLATE, context);
-    }
+  let promise_arr = [
+    db.query(`SELECT s.name AS school_name, c.name AS founder_name, b.*  FROM ${BASE_TABLE} b
+      INNER JOIN school s ON b.school_id = s.id
+      INNER JOIN hpcharacter c ON b.founder_id = c.id
+      WHERE b.id = ${req.params.id}`).then( data => context.data = data[0] ),
+    db.query(`SELECT c.id, c.name FROM hpcharacter c
+      INNER JOIN house h ON c.house_id = h.id
+      WHERE h.id = ${req.params.id}`).then( (data) => context.characters = data )
+  ];
+
+  Promise.all(promise_arr)
+  .then( () => {
+    res.render(SHOW_ONE_TEMPLATE, context);
   })
   .catch( (e) => {
     console.log(e, e.stack);
     context.error = e;
     res.render(SHOW_ONE_TEMPLATE, context);
-  })
+  });
 });
 
 router.get('/:id/edit', (req,res,next) => {

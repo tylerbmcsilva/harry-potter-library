@@ -20,23 +20,31 @@ router.get('/', (req,res,next) => {
 
 router.get('/add', (req,res,next) => {
   let context = {};
-  res.render(ADD_EDIT_FORM, context);
+  db.listAll('house')
+  .then( (data) => {
+    context.houses = data;
+    res.render(ADD_EDIT_FORM, context);
+  })
+  .catch( (e) => {
+    console.log(e, e.stack);
+    res.redirect(BASE_URL);
+  });
 });
 
 router.post('/add', (req,res,next) => {
   let b = req.body;
-  let birth_string = '';
-  let death_string = '';
+  let birth_string = "NULL";
+  let death_string = "NULL";
 
-  if(b.birth != ""){
+  if(b.birth !== ""){
     let birth = new Date(b.birth);
     birth_string =`${birth.getFullYear()}-${birth.getMonth()+1}-${birth.getDate()}`;
   }
-  if(b.death != "") {
+  if(b.death !== "") {
     let death = new Date(b.death);
     death_string = `${death.getFullYear()}-${death.getMonth()+1}-${death.getDate()}`
   }
-  db.createRow(BASE_TABLE, 'name, hometown, birth, death, description',`"${b.name}","${b.hometown}","${birth_string}","${death_string}","${b.description}"` )
+  db.createRow(BASE_TABLE, 'name, hometown, birth, death, description, house_id',`"${b.name}","${b.hometown}","${birth_string}","${death_string}","${b.description}",${b.house_id ? b.house_id : "NULL"}` )
   .then( data => res.redirect(`${BASE_URL}/${data.insertId}`) )
   .catch( (e) => {
     console.log(e, e.stack);
@@ -59,7 +67,11 @@ router.get('/:id', (req,res,next) => {
     db.query(`SELECT c2.id, c2.name, r.relation FROM hpcharacter c
       INNER JOIN hpcharacter_relations r ON c.id = r.char1_id
       INNER JOIN hpcharacter c2 ON c2.id = r.char2_id
-      WHERE c.id = ${req.params.id}`).then( data => context.relations = data )
+      WHERE c.id = ${req.params.id}`).then( data => context.relations = data ),
+    db.query(`SELECT s.name AS school_name, s.id AS school_id, h.name AS house_name, h.id AS house_id FROM house h
+      INNER JOIN hpcharacter c ON c.house_id = h.id
+      INNER JOIN school s ON s.id = h.school_id
+      WHERE c.id = ${req.params.id}`).then( data => context.school = data[0] )
   ]
 
   Promise.all(promise_arr)
@@ -75,13 +87,13 @@ router.get('/:id', (req,res,next) => {
 
 router.get('/:id/edit', (req,res,next) => {
   let context = {};
-  db.selectById(BASE_TABLE, req.params.id).then( (data) => {
-    if(data.length){
-      context.character = data[0];
-      res.render(ADD_EDIT_FORM, context);
-    } else {
-      res.redirect(BASE_URL);
-    }
+  let promise_arr = [
+    db.listAll('house').then( (data) => context.houses = data ),
+    db.selectById(BASE_TABLE, req.params.id).then( (data) => context.character = data[0] )
+  ]
+  Promise.all(promise_arr)
+  .then( () => {
+    res.render(ADD_EDIT_FORM, context);
   })
   .catch( (e) => {
     console.log(e, e.stack);
@@ -96,7 +108,8 @@ router.post('/:id/edit', (req,res,next) => {
                       `hometown="${req.body.hometown}"`,
                       `birth="${birth.getFullYear()}-${birth.getMonth()+1}-${birth.getDate()}"`,
                       `death="${death.getFullYear()}-${death.getMonth()+1}-${death.getDate()}"`,
-                      `description="${req.body.description}"`
+                      `description="${req.body.description}"`,
+                      `house_id="${req.body.house_id ? req.body.house_id : "NULL"}"`
                     ].join(',');
 
   db.updateRowById(BASE_TABLE, update_vals, req.body.id).then( (data) => {
@@ -106,6 +119,69 @@ router.post('/:id/edit', (req,res,next) => {
     console.log(e, e.stack);
     res.redirect(BASE_URL);
   });
-})
+});
+
+router.get('/:id/add-concentration', (req,res,next) => {
+  let context = {};
+  db.listAll('concentrations').then( data => {
+    context.concentrations = data;
+    res.render('character-add-concentration', context);
+  })
+  .catch( (e) => {
+    console.log(e, e.stack);
+    res.redirect(BASE_URL);
+  });
+});
+
+router.post('/:id/add-concentration', (req,res,next) => {
+  db.createRow('hpcharacter_concentrations', 'hpcharacter_id,concentration_id',
+    `${req.params.id},${req.body.concentration_id}`)
+    .then( data => {
+      res.redirect(`${BASE_URL}/${req.params.id}`)
+    })
+});
+
+router.get('/:id/add-relation', (req,res,next) => {
+  let context = {};
+  db.listAll('hpcharacter').then( data => {
+    context.characters = data;
+    res.render('character-add-relation', context);
+  })
+  .catch( (e) => {
+    console.log(e, e.stack);
+    res.redirect(BASE_URL);
+  });
+});
+
+function inverseRelation(r) {
+  switch(r) {
+    case "Parent":
+      return "Child";
+      break;
+    case "Child":
+      return "Parent";
+      break;
+    case "Spouse":
+      return "Spouse";
+      break;
+    case "Sibling":
+      return "Sibling";
+      break;
+    default:
+      return;
+  }
+}
+
+router.post('/:id/add-relation', (req,res,next) => {
+  let inverse = inverseRelation(req.body.relation);
+  db.query(`INSERT INTO hpcharacter_relations (char1_id,char2_id,relation) VALUES (${req.params.id},${req.body.char2_id},"${req.body.relation}"),(${req.body.char2_id},${req.params.id},"${inverse}")`)
+    .then( data => {
+      res.redirect(`${BASE_URL}/${req.params.id}`)
+    })
+    .catch( (e) => {
+      console.log(e, e.stack);
+      res.redirect(BASE_URL);
+    });
+});
 
 module.exports = router;

@@ -11,7 +11,7 @@
   <div class="form-group row">
     <label for="name" class="col-2 col-form-label">Name</label>
     <div class="col-10">
-      <input class="form-control" name="name" type="text" value="{{character.name}}" id="name">
+      <input class="form-control" name="name" type="text" required value="{{character.name}}" id="name">
     </div>
   </div>
   <div class="form-group row">
@@ -30,6 +30,16 @@
     <label for="death" class="col-2 col-form-label">Death</label>
     <div class="col-10">
       <input class="form-control" name="death" type="date" value="{{character.death}}" id="death">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="house_id" class="col-2 col-form-label">House</label>
+    <div class="col-10">
+      <select class="form-control" name="house_id" id="house_id">
+        {{#each houses}}
+        <option value="{{id}}" {{#if_eq id @root.character.house_id}}selected{{/if_eq}}>{{name}}</option>
+        {{/each}}
+      </select>
     </div>
   </div>
   <div class="form-group row">

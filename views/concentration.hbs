@@ -18,4 +18,10 @@
   </div>
 </div>
 <p>{{concentration.description}}</p>
+<h3>Characters</h3>
+<ul>
+  {{#each characters}}
+  <li><a href="/characters/{{id}}">{{name}}</a></li>
+  {{/each}}
+</ul>
 {{/if}}

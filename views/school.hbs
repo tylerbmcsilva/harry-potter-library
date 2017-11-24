@@ -28,13 +28,28 @@
     <td>{{school.location}}</td>
   </tr>
 </table>
-<h3>Houses</h3>
-<ul>
-  {{#each houses}}
-  <li>
-    <a href="/houses/{{id}}">{{name}}</a>
-  </li>
-  {{/each}}
-</ul>
-<a href="/houses/add?school_id={{school.id}}" class="btn btn-primary">ADD HOUSE</a>
+<div class="row">
+  <div class="col-md-6">
+    <h3>Houses</h3>
+    <ul>
+      {{#each houses}}
+      <li>
+        <a href="/houses/{{id}}">{{name}}</a>
+      </li>
+      {{/each}}
+    </ul>
+    <a href="/houses/add?school_id={{school.id}}" class="btn btn-primary">ADD HOUSE</a>
+  </div>
+  <div class="col-md-6">
+    <h3>Characters</h3>
+    <ul>
+      {{#each characters}}
+      <li>
+        <a href="/characters/{{id}}">{{name}}</a>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
+
 {{/if}}
