@@ -36,21 +36,5 @@ app.use((err, req, res, next) => {
   res.status(500).render('500');
 });
 
-db.createTable('hp_characters', 'id int(32) NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)')
-	.then( (a) => {
-		console.log(a);
-	})
-	.catch( (e) => {
-		console.log('error', e);
-	});
-db.createRow('hp_characters', 'name','("Tyler McSilva")')
-	.then( (a) => {
-		console.log(a);
-	})
-	.catch( (e) => {
-		console.log('error', e);
-	});
-
-
 
 app.listen(PORT, () => console.log(`Started on http://localhost:${PORT}; press Ctrl-C to terminate.`) );

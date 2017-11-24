@@ -4,8 +4,6 @@ DROP TABLE IF EXISTS `hpcharacter`;
 DROP TABLE IF EXISTS `house`;
 DROP TABLE IF EXISTS `pet`;
 DROP TABLE IF EXISTS `hpcharacter_relations`;
-DROP TABLE IF EXISTS `hpcharacter_pets`;
-DROP TABLE IF EXISTS `hpcharacter_houses`;
 DROP TABLE IF EXISTS `hpcharacter_concentrations`;
 DROP TABLE IF EXISTS `schools_houses`;
 

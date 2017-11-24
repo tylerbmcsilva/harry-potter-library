@@ -46,7 +46,33 @@ exports.createRow = (table, cols, values) => {
   return new Promise( (resolve, reject) => {
     db.getConnection( (err, connection) => {
       if(err) reject(err);
-      connection.query(`INSERT INTO ${table} (${cols}) VALUES ${values}`, (error, result) => {
+      connection.query(`INSERT INTO ${table} (${cols}) VALUES (${values});`, (error, result) => {
+        connection.release();
+        if(error) reject(error);
+        resolve(result);
+      });
+    })
+  });
+}
+
+exports.updateRowById = (table, vals, id) => {
+  return new Promise( (resolve, reject) => {
+    db.getConnection( (err, connection) => {
+      if(err) reject(err);
+      connection.query(`UPDATE ${table} SET ${vals} WHERE id = ${id};`, (error, result) => {
+        connection.release();
+        if(error) reject(error);
+        resolve(result);
+      });
+    })
+  });
+}
+
+exports.selectById = (table, id) => {
+  return new Promise( (resolve, reject) => {
+    db.getConnection( (err, connection) => {
+      if(err) reject(err);
+      connection.query(`SELECT * FROM ${table} WHERE id = ${id} LIMIT 1;`, (error, result) => {
         connection.release();
         if(error) reject(error);
         resolve(result);
