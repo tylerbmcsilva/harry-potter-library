@@ -3,19 +3,24 @@ const { Router } = require('express');
 
 var router = new Router();
 
+const BASE_TABLE        = 'hpcharacter';
+const BASE_URL          = '/characters';
+const LIST_ALL_TEMPLATE = 'characters';
+const SHOW_ONE_TEMPLATE = 'character';
+const ADD_EDIT_FORM     = 'character-form';
+
 // Get all
 router.get('/', (req,res,next) => {
   let context = {};
-  db.listAll('hpcharacter').then( (data) => {
+  db.listAll(BASE_TABLE).then( (data) => {
     context.characters = data;
-    res.render('characters', context);
-  })
-
+    res.render(LIST_ALL_TEMPLATE, context);
+  });
 });
 
 router.get('/add', (req,res,next) => {
   let context = {};
-  res.render('character-form', context);
+  res.render(ADD_EDIT_FORM, context);
 });
 
 router.post('/add', (req,res,next) => {
@@ -31,48 +36,49 @@ router.post('/add', (req,res,next) => {
     let death = new Date(b.death);
     death_string = `${death.getFullYear()}-${death.getMonth()+1}-${death.getDate()}`
   }
-  db.createRow('hpcharacter', 'name, hometown, birth, death, description',`"${b.name}","${b.hometown}","${birth_string}","${death_string}","${b.description}"` )
-  .then( data => res.redirect(`/characters/${data.insertId}`) )
+  db.createRow(BASE_TABLE, 'name, hometown, birth, death, description',`"${b.name}","${b.hometown}","${birth_string}","${death_string}","${b.description}"` )
+  .then( data => res.redirect(`${BASE_URL}/${data.insertId}`) )
   .catch( (e) => {
     console.log(e, e.stack);
-    res.redirect('/characters');
+    res.redirect(BASE_URL);
   });
 });
 
 // Get 1
 router.get('/:id', (req,res,next) => {
   let context = {};
-  db.selectById('hpcharacter', req.params.id).then( (data) => {
+  db.selectById(BASE_TABLE, req.params.id).then( (data) => {
     if(data.length){
       context.character = data[0];
-      res.render('character', context);
+      res.render(SHOW_ONE_TEMPLATE, context);
     } else {
       context.error = "No Character Found";
-      res.render('character', context);
+      res.render(SHOW_ONE_TEMPLATE, context);
     }
   })
   .catch( (e) => {
     console.log(e, e.stack);
     context.error = e;
-    res.render('character', context);
+    res.render(SHOW_ONE_TEMPLATE, context);
   })
-
 });
+
 router.get('/:id/edit', (req,res,next) => {
   let context = {};
-  db.selectById('hpcharacter', req.params.id).then( (data) => {
+  db.selectById(BASE_TABLE, req.params.id).then( (data) => {
     if(data.length){
       context.character = data[0];
-      res.render('character-form', context);
+      res.render(ADD_EDIT_FORM, context);
     } else {
-      res.redirect('/characters');
+      res.redirect(BASE_URL);
     }
   })
   .catch( (e) => {
     console.log(e, e.stack);
-    res.redirect('/characters');
+    res.redirect(BASE_URL);
   })
 });
+
 router.post('/:id/edit', (req,res,next) => {
   let birth = new Date(req.body.birth);
   let death = new Date(req.body.death);
@@ -83,23 +89,13 @@ router.post('/:id/edit', (req,res,next) => {
                       `description="${req.body.description}"`
                     ].join(',');
 
-  db.updateRowById('hpcharacter', update_vals, req.body.id).then( (data) => {
+  db.updateRowById(BASE_TABLE, update_vals, req.body.id).then( (data) => {
     res.redirect(`/characters/${req.body.id}`);
   })
   .catch( (e) => {
     console.log(e, e.stack);
-    res.redirect('/characters');
+    res.redirect(BASE_URL);
   });
 })
-
-// Update 1
-router.put('/:id',  (req,res,next) => {
-  res.send('update');
-});
-
-// Delete 1
-router.delete('/:id',  (req,res,next) => {
-  res.send('delete');
-});
 
 module.exports = router;

@@ -1,0 +1,22 @@
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/concentrations">Concentrations</a></li>
+  <li class="breadcrumb-item active">{{#if concentration}}Edit{{else}}Add{{/if}}</li>
+</ol>
+<h1>{{#if concentration}}Edit{{else}}Add{{/if}} Concentration</h1>
+<form method="post">
+  <input class="hidden-xs-up" type="hidden" name="id" value="{{concentration.id}}" />
+  <div class="form-group row">
+    <label for="title" class="col-2 col-form-label">Title</label>
+    <div class="col-10">
+      <input class="form-control" name="title" type="text" value="{{concentration.title}}" id="title">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description" class="col-2 col-form-label">Description</label>
+    <div class="col-10">
+      <textarea class="form-control" name="description" id="description" rows="3">{{concentration.description}}</textarea>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

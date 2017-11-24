@@ -1,0 +1,21 @@
+{{#if error}}
+<div class="alert alert-danger" role="alert">
+  <h3 class="alert-heading">The nargles are at it again...</h3>
+  <p>{{error}}</p>
+</div>
+{{else}}
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/concentrations">Concentrations</a></li>
+  <li class="breadcrumb-item active">{{concentration.title}}</li>
+</ol>
+<div class="row">
+  <div class="col-11">
+    <h2>{{concentration.title}}</h2>
+  </div>
+  <div class="col-1">
+    <a href="/concentrations/{{concentration.id}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+  </div>
+</div>
+<p>{{concentration.description}}</p>
+{{/if}}
