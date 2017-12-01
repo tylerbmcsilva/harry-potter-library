@@ -1,0 +1,27 @@
+<ol class="breadcrumb bg-white">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/characters">Characters</a></li>
+  <li class="breadcrumb-item active">{{#if character}}Edit{{else}}Add{{/if}}</li>
+</ol>
+<h1>Delete Character</h1>
+<form method="post">
+  <div class="hidden-xs-up">
+
+  </div>
+  <div class="form-group">
+    <label for="id" class="form-label">Are you sure you want to delete {{character.name}}?</label>
+    <input class="hidden-xs-up" type="hidden" name="id" value="{{character.id}}" />
+  </div>
+  {{#if pets}}
+  <div>
+    <p>This will also delete:</p>
+    <ul>
+      {{#each pets}}
+      <li>{{name}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+  <a href="/characters/{{character.id}}" class="btn btn-secondary">NO</a>
+  <button type="submit" class="btn btn-danger">YES</button>
+</form>

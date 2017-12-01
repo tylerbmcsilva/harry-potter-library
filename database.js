@@ -81,6 +81,19 @@ exports.selectById = (table, id) => {
   });
 }
 
+exports.deleteById = (table, id) => {
+  return new Promise( (resolve, reject) => {
+    db.getConnection( (err, connection) => {
+      if(err) reject(err);
+      connection.query(`DELETE FROM ${table} WHERE id = ${id};`, (error, result) => {
+        connection.release();
+        if(error) reject(error);
+        resolve(result);
+      });
+    })
+  });
+}
+
 exports.query = (query) => {
   return new Promise( (resolve, reject) => {
     db.getConnection( (err, connection) => {

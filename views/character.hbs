@@ -15,7 +15,10 @@
     <h2>{{character.name}}</h2>
   </div>
   <div class="col-1">
-    <a href="/characters/{{character.id}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+    <div class="btn-group">
+      <a href="/characters/{{character.id}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+      <a href="/characters/{{character.id}}/delete" class="btn btn-sm btn-outline-danger">Delete</a>
+    </div>
   </div>
 </div>
 <p>{{character.description}}</p>

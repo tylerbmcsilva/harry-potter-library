@@ -85,6 +85,37 @@ router.get('/:id', (req,res,next) => {
   })
 });
 
+router.get('/:id/delete', (req,res,next) => {
+  let context = {};
+  let promise_arr = [
+    db.selectById(BASE_TABLE, req.params.id).then( data => context.character = data[0] ),
+    db.query(`SELECT p.id, p.name FROM pet p
+      INNER JOIN hpcharacter c ON p.owner_id = c.id
+      WHERE c.id = ${req.params.id}`).then( data => context.pets = data )
+  ]
+
+  Promise.all(promise_arr)
+  .then( ()=> {
+    res.render('character-delete', context);
+  })
+  .catch( (e) => {
+    console.log(e, e.stack);
+    context.error = e;
+    res.redirect('/characters')
+  })
+});
+
+router.post('/:id/delete', (req,res,next) => {
+  db.deleteById(BASE_TABLE, req.params.id)
+  .then( (data) => {
+    res.redirect('/characters');
+  })
+  .catch( (e) => {
+    console.log(e, e.stack);
+    res.redirect('/characters')
+  });
+});
+
 router.get('/:id/edit', (req,res,next) => {
   let context = {};
   let promise_arr = [
