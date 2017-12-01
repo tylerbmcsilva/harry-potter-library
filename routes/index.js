@@ -10,7 +10,7 @@ const schoolsRouter       = require('./schools');
 var router = new Router();
 
 router.get('/', (req, res) => res.render('index') );
-router.use('/admin', adminRouter);
+// router.use('/admin', adminRouter);
 router.use('/characters', characterRouter);
 router.use('/concentrations', concentrationRouter);
 router.use('/houses', housesRouter);
